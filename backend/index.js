@@ -1,3 +1,8 @@
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import fetch from "isomorphic-unfetch";
+
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: true }));
@@ -29,4 +34,3 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-;
