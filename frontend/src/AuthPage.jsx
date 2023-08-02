@@ -5,7 +5,7 @@ const AuthPage = (props) => {
         e.preventDefault();
         const { value } = e.target[0];
         axios.post(
-            'http://localhost:3001/authenticate',
+            import.meta.env.VITE_BACKEND_URL + '/authenticate',
             { username: value }
         )
             .then(r => props.onAuth({ ...r.data, secret: value }))
@@ -30,5 +30,6 @@ const AuthPage = (props) => {
         </div>
     );
 };
+console.log(import.meta.env.VITE_BACKEND_URL + '/authenticate');
 
 export default AuthPage;
