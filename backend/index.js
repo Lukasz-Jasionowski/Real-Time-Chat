@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const { default: axios } = require("axios");
+const fetch = require("isomorphic-unfetch");
 
 const app = express();
 app.use(express.json());
@@ -11,15 +11,27 @@ app.post("/authenticate", async (req, res) => {
     const { username } = req.body;
 
     try {
-        const resp = await axios.put("https://api.chatengine.io/users/",
-            { username: username, secret: username, first_name: username },
-            { headers: { "private-key": process.env.API_KEY } }
-        );
-        return res.status(resp.status).json(resp.data);
+        const resp = await fetch("https://api.chatengine.io/users/", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "private-key": process.env.API_KEY,
+            },
+            body: JSON.stringify({
+                username: username,
+                secret: username,
+                first_name: username,
+            }),
+        });
+        const data = await resp.json();
+        return res.status(resp.status).json(data);
     } catch (error) {
-        return res.status(error.response.status).json(error.response.data)
-    };
-
-    return res.json({ username: username, secret: "sha256..." });
+        return res.status(error.status || 500).json(error.message || "Something went wrong");
+    }
 });
-app.listen(process.env.PORT || 3001) ;
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+;
