@@ -30,6 +30,5 @@ const AuthPage = (props) => {
         </div>
     );
 };
-console.log(import.meta.env.VITE_BACKEND_URL + '/authenticate');
 
 export default AuthPage;
